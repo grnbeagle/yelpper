@@ -7,16 +7,25 @@
 //
 
 #import "AppDelegate.h"
-#import "MainViewController.h"
+#import "ListViewController.h"
+#import "Utils.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    CGFloat colors[3] ={196.0, 18.0, 0.0};
+    UIColor *red = [Utils getColorFrom:colors];
+
+    ListViewController *listViewController = [[ListViewController alloc] init];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listViewController];
     
-    self.window.rootViewController = [[MainViewController alloc] init];
-    
+    navigationController.navigationBar.barTintColor = red;
+    navigationController.navigationBar.tintColor = [UIColor whiteColor];
+
+    self.window.rootViewController = navigationController;
+
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;

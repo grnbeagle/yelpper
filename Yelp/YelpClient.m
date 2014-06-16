@@ -28,4 +28,13 @@
     return [self GET:@"search" parameters:parameters success:success failure:failure];
 }
 
+- (AFHTTPRequestOperation *)searchWithTerm:(NSString *)term withFilters:(NSDictionary *)filters success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters addEntriesFromDictionary:@{@"term": term, @"location" : @"San Francisco"}];
+    [parameters addEntriesFromDictionary:filters];
+
+    NSLog(@"%@", parameters);
+    return [self GET:@"search" parameters:parameters success:success failure:failure];
+}
 @end
