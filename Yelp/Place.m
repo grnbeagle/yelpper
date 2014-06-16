@@ -24,50 +24,72 @@
 
 + (NSArray *)getCategories {
     NSArray *categories = @[
-                            @{@"name": @"Active Life", @"value": @"active"},
-                            @{@"name": @"Arts & Entertainment", @"value": @"arts"},
-                            @{@"name": @"Automotive", @"value": @"auto"},
-                            @{@"name": @"Beauty & Spas", @"value": @"beautysvc"},
-                            @{@"name": @"Bicycles", @"value": @"bicycles"},
-                            @{@"name": @"Education", @"value": @"education"},
-                            @{@"name": @"Event Planning & Services", @"value": @"eventservices"},
-                            @{@"name": @"Financial Services", @"value": @"financialservices"},
-                            @{@"name": @"Food", @"value": @"food"},
-                            @{@"name": @"Health Markets", @"value": @"healthmarkets"},
-                            @{@"name": @"Home Services", @"value": @"homeservices"},
-                            @{@"name": @"Hotels & Travel", @"value": @"hotelstravel"},
-                            @{@"name": @"Local Flavor", @"value": @"localflavor"},
-                            @{@"name": @"Local Services", @"value": @"localservices"},
-                            @{@"name": @"Mass Media", @"value": @"massmedia"},
-                            @{@"name": @"Nightlife", @"value": @"nightlife"},
-                            @{@"name": @"Pets", @"value": @"pets"},
-                            @{@"name": @"Professional Services", @"value": @"professional"},
-                            @{@"name": @"Public Relations", @"value": @"publicrelations"},
-                            @{@"name": @"Real Estate", @"value": @"realestate"},
-                            @{@"name": @"Religious Organizations", @"value": @"religiousorgs"},
-                            @{@"name": @"Restaurants", @"value": @"restaurants"},
-                            @{@"name": @"Shopping", @"value": @"shopping"}
-                            ];
+      @{@"name": @"American (New)", @"value": @"newamerican"},
+      @{@"name": @"American (Traditional)", @"value": @"tradamerican"},
+      @{@"name": @"Argentine", @"value": @"argentine"},
+      @{@"name": @"Asian Fusion", @"value": @"asianfusion"},
+      @{@"name": @"Australian", @"value": @"australian"},
+      @{@"name": @"Austrian", @"value": @"austrian"},
+      @{@"name": @"Beer Garden", @"value": @"beergarden"},
+      @{@"name": @"Belgian", @"value": @"belgian"},
+      @{@"name": @"Brazilian", @"value": @"brazilian"},
+      @{@"name": @"Breakfast & Brunch", @"value": @"breakfast_brunch"},
+      @{@"name": @"Buffets", @"value": @"buffets"},
+      @{@"name": @"Burgers", @"value": @"burgers"},
+      @{@"name": @"Burmese", @"value": @"burmese"},
+      @{@"name": @"Cafes", @"value": @"cafes"},
+      @{@"name": @"Cajun/Creole", @"value": @"cajun"},
+      @{@"name": @"Canadian", @"value": @"newcanadian"},
+      @{@"name": @"Chinese", @"value": @"chinese"},
+      @{@"name": @"Cantonese", @"value": @"cantonese"},
+      @{@"name": @"Dim Sum", @"value": @"dimsum"},
+      @{@"name": @"Cuban", @"value": @"cuban"},
+      @{@"name": @"Diners", @"value": @"diners"},
+      @{@"name": @"Dumplings", @"value": @"dumplings"},
+      @{@"name": @"Ethiopian", @"value": @"ethiopian"},
+      @{@"name": @"Fast Food", @"value": @"hotdogs"},
+      @{@"name": @"French", @"value": @"french"},
+      @{@"name": @"German", @"value": @"german"},
+      @{@"name": @"Greek", @"value": @"greek"},
+      @{@"name": @"Indian", @"value": @"indpak"},
+      @{@"name": @"Indonesian", @"value": @"indonesian"},
+      @{@"name": @"Irish", @"value": @"irish"},
+      @{@"name": @"Italian", @"value": @"italian"},
+      @{@"name": @"Japanese", @"value": @"japanese"},
+      @{@"name": @"Jewish", @"value": @"jewish"},
+      @{@"name": @"Korean", @"value": @"korean"},
+      @{@"name": @"Venezuelan", @"value": @"venezuelan"},
+      @{@"name": @"Malaysian", @"value": @"malaysian"},
+      @{@"name": @"Pizza", @"value": @"pizza"},
+      @{@"name": @"Russian", @"value": @"russian"},
+      @{@"name": @"Salad", @"value": @"salad"},
+      @{@"name": @"Scandinavian", @"value": @"scandinavian"},
+      @{@"name": @"Seafood", @"value": @"seafood"},
+      @{@"name": @"Turkish", @"value": @"turkish"},
+      @{@"name": @"Vegan", @"value": @"vegan"},
+      @{@"name": @"Vegetarian", @"value": @"vegetarian"},
+      @{@"name": @"Vietnamese", @"value": @"vietnamese"}
+    ];
     return categories;
 }
 
 + (NSArray *)getDistanceOptions {
     NSArray *options = @[
-                          @{@"name": @"Auto", @"value": @"auto"},
-                          @{@"name": @"1 mile", @"value": [NSString stringWithFormat:@"%i", [Utils converToMeter:1]]},
-                          @{@"name": @"5 miles", @"value": [NSString stringWithFormat:@"%i", [Utils converToMeter:5]]},
-                          @{@"name": @"10 miles", @"value": [NSString stringWithFormat:@"%i", [Utils converToMeter:10]]},
-                          @{@"name": @"20 miles", @"value": [NSString stringWithFormat:@"%i", [Utils converToMeter:20]]}
-                          ];
+      @{@"name": @"Auto", @"value": @"auto"},
+      @{@"name": @"1 mile", @"value": [NSString stringWithFormat:@"%i", [Utils converToMeter:1]]},
+      @{@"name": @"5 miles", @"value": [NSString stringWithFormat:@"%i", [Utils converToMeter:5]]},
+      @{@"name": @"10 miles", @"value": [NSString stringWithFormat:@"%i", [Utils converToMeter:10]]},
+      @{@"name": @"20 miles", @"value": [NSString stringWithFormat:@"%i", [Utils converToMeter:20]]}
+    ];
     return options;
 }
 
 + (NSArray *)getSortOptions {
     NSArray *options = @[
-                          @{@"name": @"Best match", @"value": @"0"},
-                          @{@"name": @"Distance", @"value": @"1"},
-                          @{@"name": @"Highest rated", @"value": @"2"}
-                          ];
+      @{@"name": @"Best match", @"value": @"0"},
+      @{@"name": @"Distance", @"value": @"1"},
+      @{@"name": @"Highest rated", @"value": @"2"}
+    ];
     return options;
 }
 @end
