@@ -25,7 +25,10 @@
 
 - (void)setPlace:(Place *)place {
     self.nameLabel.text = place.name;
-    self.addressLabel.text = place.address[0];
+    if (place.address.count > 0) {
+        self.addressLabel.text = place.address[0];
+    }
+    
     [Utils loadImageUrl:place.imageThumbUrl inImageView:self.thumbImage withAnimation:YES];
     [Utils loadImageUrl:place.imageRatingUrl inImageView:self.ratingImage withAnimation:YES];
     self.categoryLabel.text = place.category[0][0];

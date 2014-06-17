@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FilterViewController.h"
 
-@interface ListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, SearchFilterDelegate>
+@interface ListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, SearchFilterDelegate>
 
 @property (nonatomic, strong) NSDictionary *filterSelection;
 

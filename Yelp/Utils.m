@@ -40,4 +40,9 @@
 + (NSInteger)converToMeter:(NSInteger)miles {
     return miles * 1609;
 }
+
++ (UIColor *)getYelpRed {
+    CGFloat colors[3] ={196.0, 18.0, 0.0};
+    return [Utils getColorFrom:colors];
+}
 @end

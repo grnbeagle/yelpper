@@ -48,6 +48,7 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
 
 - (void)viewDidLoad
 {
+    NSLog(@"list view viewDidLoad");
     [super viewDidLoad];
     [self setupUI];
     
@@ -62,7 +63,8 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    [self viewDidLoad];
+    NSLog(@"list view viewDidAppear");
+   // [self viewDidLoad];
     if ([self.filterSelection count] > 0) {
         [self search];
     }
@@ -129,23 +131,38 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
     self.filterSelection = filters;
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    self.searchTerm = textField.text;
+    [self search];
+    return YES;
+}
+
 - (void)setupUI {
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 310, 45.0)];
-    searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    
+//    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 310, 45.0)];
+//    searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    UITextField *searchBar = [[UITextField alloc] initWithFrame:CGRectMake(5.0, 10.0, 200, 28.0)];
     UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 45.0)];
     searchBarView.autoresizingMask = 0;
     searchBar.delegate = self;
+    searchBar.keyboardType = UIKeyboardTypeWebSearch;
     // workaround to place search icon on the left
-    searchBar.placeholder = @"Search                                       ";
+    searchBar.placeholder = @"Search";
     searchBar.text = self.searchTerm;
-    CGFloat colors[3] ={196.0, 18.0, 0.0};
-    searchBar.barTintColor = [Utils getColorFrom:colors];
+    searchBar.font = [UIFont systemFontOfSize:14];
+    searchBar.backgroundColor = [UIColor whiteColor];
+    searchBar.tintColor = [UIColor grayColor];
+    searchBar.borderStyle = UITextBorderStyleRoundedRect;
+    searchBar.clearButtonMode = UITextFieldViewModeWhileEditing;
+    //CGFloat colors[3] ={196.0, 18.0, 0.0};
+    //searchBar.barTintColor = [Utils getColorFrom:colors];
     [searchBarView addSubview:searchBar];
     self.navigationItem.titleView = searchBarView;
     
     UIBarButtonItem *filterButton = [[UIBarButtonItem alloc]
                                      initWithTitle:@"Filter"
-                                     style:UIBarButtonItemStyleBordered
+                                     style:UIBarButtonItemStylePlain
                                      target:self
                                      action:@selector(showFilterScreen)];
     self.navigationItem.leftBarButtonItem = filterButton;

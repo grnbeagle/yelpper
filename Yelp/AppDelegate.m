@@ -15,14 +15,14 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    CGFloat colors[3] ={196.0, 18.0, 0.0};
-    UIColor *red = [Utils getColorFrom:colors];
+
 
     ListViewController *listViewController = [[ListViewController alloc] init];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listViewController];
     
-    navigationController.navigationBar.barTintColor = red;
+    navigationController.navigationBar.barTintColor = [Utils getYelpRed];
     navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
 
     self.window.rootViewController = navigationController;
 

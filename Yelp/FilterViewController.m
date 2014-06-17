@@ -9,20 +9,23 @@
 #import "FilterViewController.h"
 #import "ListViewController.h"
 #import "Place.h"
+#import "Utils.h"
 
 @interface FilterViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+// a list of filters to display
 @property (nonatomic, strong) NSArray *filters;
 
 // map of section number to expanded state
 @property (nonatomic, strong) NSMutableDictionary *expanded;
 
-// map of section number to row number to selected state
-@property (nonatomic, strong) NSMutableDictionary *selected;
-
 // result of filter values
 @property (nonatomic, strong) NSMutableDictionary *filterSelection;
 
+// keep track of category selection in a separate mutable array;
+// converting an immutable array from NSUserDefaults to a mutable one
+// was causing too many issues..
+@property (nonatomic, strong) NSMutableArray *categorySelection;
 @end
 
 @implementation FilterViewController
@@ -35,6 +38,7 @@ NSInteger maxCountCollapsed = 5;
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.title = @"Filter";
         self.filters = @[@{@"title":@"Most Popular",
                            @"data": @[@{@"name":@"Offering a Deal", @"key": @"deals_filter"}],
                            @"type": @"toggle"
@@ -55,47 +59,49 @@ NSInteger maxCountCollapsed = 5;
                            @"key": @"category_filter"
                            }
                          ];
-        self.expanded = [NSMutableDictionary dictionary];
-        self.selected = [NSMutableDictionary dictionary];
-        self.filterSelection = [NSMutableDictionary dictionary];
+        self.expanded = [[NSMutableDictionary alloc] init];
+        self.categorySelection = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
+
+    [self setupUI];
 
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    NSUserDefaults *store = [NSUserDefaults standardUserDefaults];
+    self.filterSelection = [[store objectForKey:@"savedFilters"] mutableCopy];
+
+    if (self.filterSelection == nil) {
+        self.filterSelection = [NSMutableDictionary dictionary];
+    }
+    
+    if ([self.filterSelection objectForKey:@"category_filter"] != nil) {
+        NSString *commaSeparated = [self.filterSelection objectForKey:@"category_filter"];
+        NSArray *array = [commaSeparated componentsSeparatedByString:@","];
+        self.categorySelection = [NSMutableArray arrayWithArray:array];
+    }
 
     [self.tableView reloadData];
-    
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]
-                                     initWithTitle:@"Cancel"
-                                     style:UIBarButtonItemStyleBordered
-                                     target:self
-                                     action:@selector(cancel)];
-    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc]
-                                     initWithTitle:@"Search"
-                                     style:UIBarButtonItemStyleBordered
-                                     target:self
-                                     action:@selector(search)];
-    self.navigationItem.leftBarButtonItem = cancelButton;
-    self.navigationItem.rightBarButtonItem = searchButton;
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.filters.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 40;
+    return 45;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -111,16 +117,13 @@ NSInteger maxCountCollapsed = 5;
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     // Display group text
-    UILabel *sectionTitle = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 300, 40)];
+    UILabel *sectionTitle = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 300, 35)];
     sectionTitle.text = [self.filters[section][@"title"] uppercaseString];
     sectionTitle.font = [sectionTitle.font fontWithSize:13];
     sectionTitle.textColor = [UIColor darkGrayColor];
     UIView *view = [[UIView alloc] init];
     [view addSubview:sectionTitle];
     
-    if (self.selected[@(section)] == nil) {
-        self.selected[@(section)] = [NSMutableDictionary dictionary];
-    }
     return view;
 }
 
@@ -129,22 +132,26 @@ NSInteger maxCountCollapsed = 5;
                              initWithStyle:UITableViewCellStyleDefault
                              reuseIdentifier:nil];
 
-    NSDictionary *filterGroup = self.filters[indexPath.section];
-    NSArray *choices = filterGroup[@"data"];
     BOOL sectionExpanded = [self.expanded[@(indexPath.section)] boolValue];
-    cell.textLabel.text = choices[indexPath.row][@"name"];
+
+    NSDictionary *filterGroup = self.filters[indexPath.section];
+    NSArray *filterOptions = filterGroup[@"data"];
+    NSDictionary *currentRowOption = filterOptions[indexPath.row];
+
+    cell.textLabel.text = currentRowOption[@"name"];
     
     if ([filterGroup[@"type"] isEqual: @"toggle"]) {
         // Show toggle button
         UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
         cell.accessoryView = switchView;
-        [switchView setOn:NO animated:NO];
+        BOOL selected = [self.filterSelection objectForKey:currentRowOption[@"key"]] != nil;
+        [switchView setOn:selected animated:NO];
         [switchView addTarget:self
                     action:@selector(toggleChanged:)
                     forControlEvents:UIControlEventValueChanged];
     } else if ([filterGroup[@"type"] isEqual: @"multiple"]) {
-        // Show checkbox
-        if ([self.selected[@(indexPath.section)][@(indexPath.row)] boolValue]) {
+        // Show checkbox; pretend category is the only multiple option
+        if ([self.categorySelection containsObject:currentRowOption[@"value"]]) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         } else {
             cell.accessoryType = UITableViewCellAccessoryNone;
@@ -153,15 +160,15 @@ NSInteger maxCountCollapsed = 5;
             cell.textLabel.text = @"See All";
         }
     } else if ([filterGroup[@"type"] isEqual: @"single"]) {
+        NSString *selectedValue = [self.filterSelection objectForKey:filterGroup[@"key"]];
         if (sectionExpanded) {
-            if ([self.selected[@(indexPath.section)][@(indexPath.row)] boolValue]) {
+            if ([selectedValue isEqual:currentRowOption[@"value"]]) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
             } else {
                 cell.accessoryType = UITableViewCellAccessoryNone;
             }
         } else {
-            NSInteger selectedIndex = [self selectedIndexInSection:indexPath.section];
-            cell.textLabel.text = choices[selectedIndex][@"name"];
+            cell.textLabel.text = [self findNameInDictionary:filterOptions withValue:selectedValue];
         }
     }
     return cell;
@@ -169,21 +176,23 @@ NSInteger maxCountCollapsed = 5;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *filterGroup = self.filters[indexPath.section];
+    NSArray *filterOptions = filterGroup[@"data"];
+    NSDictionary *currentRowOption = filterOptions[indexPath.row];
+
     BOOL sectionExpanded = [self.expanded[@(indexPath.section)] boolValue];
     BOOL disableCollapse = sectionExpanded && [filterGroup[@"type"] isEqual: @"multiple"];
+    
     // Record selection only when it's already expanded
     if (sectionExpanded) {
         if ([filterGroup[@"type"] isEqual: @"single"]) {
-            self.filterSelection[filterGroup[@"key"]] = filterGroup[@"data"][indexPath.row][@"value"];
-            // clear previous selection for single choice filters
-            [self.selected[@(indexPath.section)] removeAllObjects];
+            self.filterSelection[filterGroup[@"key"]] = currentRowOption[@"value"];
         } else if ([filterGroup[@"type"] isEqual: @"multiple"]) {
-            if (self.filterSelection[filterGroup[@"key"]] == nil) {
-                self.filterSelection[filterGroup[@"key"]] = [[NSMutableArray alloc] init];
+            if ([self.categorySelection containsObject:currentRowOption[@"value"]]) {
+                [self.categorySelection removeObject:currentRowOption[@"value"]];
+            } else {
+                [self.categorySelection addObject:currentRowOption[@"value"]];
             }
-            [self.filterSelection[filterGroup[@"key"]] addObject:filterGroup[@"data"][indexPath.row][@"value"]];
         }
-        self.selected[@(indexPath.section)][@(indexPath.row)] = @(YES);
     }
 
     if (!disableCollapse) {
@@ -195,9 +204,12 @@ NSInteger maxCountCollapsed = 5;
 }
 
 - (void)search {
-    if (self.filterSelection[@"category_filter"] != nil) {
-        self.filterSelection[@"category_filter"] = [self.filterSelection[@"category_filter"] componentsJoinedByString:@","];
-    }
+    [self.categorySelection removeObject:@""];
+    self.filterSelection[@"category_filter"] = [self.categorySelection componentsJoinedByString:@","];
+
+    NSUserDefaults *store = [NSUserDefaults standardUserDefaults];
+    [store setObject:self.filterSelection forKey:@"savedFilters"];
+    [store synchronize];
 
     if([self.myDelegate respondsToSelector:@selector(filterSelectionDone:)]) {
         [self.myDelegate filterSelectionDone:self.filterSelection];
@@ -221,14 +233,32 @@ NSInteger maxCountCollapsed = 5;
     }
 }
 
-- (NSInteger)selectedIndexInSection:(NSInteger)section {
-    NSInteger index = 0;
-    for (id key in self.selected[@(section)]) {
-        if ([self.selected[@(section)][key] boolValue]) {
-            index = [key integerValue];
+- (id)findNameInDictionary:(NSArray *)array withValue:(NSString *)value {
+    id match = array[0][@"name"];
+    for (NSDictionary *item in array) {
+        if ([item[@"value"] isEqual:value]) {
+            match = item[@"name"];
+            break;
         }
     }
-    return index;
+    return match;
 }
 
+- (void)setupUI {
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]
+                                     initWithTitle:@"Cancel"
+                                     style:UIBarButtonItemStyleBordered
+                                     target:self
+                                     action:@selector(cancel)];
+    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc]
+                                     initWithTitle:@"Search"
+                                     style:UIBarButtonItemStyleBordered
+                                     target:self
+                                     action:@selector(search)];
+    self.navigationController.navigationBar.barTintColor = [Utils getYelpRed];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    self.navigationItem.leftBarButtonItem = cancelButton;
+    self.navigationItem.rightBarButtonItem = searchButton;
+}
 @end
