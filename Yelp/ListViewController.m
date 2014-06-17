@@ -35,8 +35,7 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
 {
     BOOL isLoading;
 }
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.searchTerm = @"";
@@ -51,8 +50,7 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     [self setupUI];
@@ -77,6 +75,7 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
 -(void)viewDidAppear:(BOOL)animated {
     NSString *model = [[UIDevice currentDevice] model];
     if ([model isEqualToString:@"iPhone Simulator"]) {
+        // Use San Francisco for simulator
         self.location = [[CLLocation alloc] initWithLatitude:37.7873589 longitude:-122.408227];
     } else {
         self.location = self.locationManager.location;
@@ -148,7 +147,10 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
      withOffset:self.offset
      success:^(AFHTTPRequestOperation *operation, id response) {
         NSError *error;
-        [self.places addObjectsFromArray:[MTLJSONAdapter modelsOfClass:[Place class] fromJSONArray:response[@"businesses"] error:&error]];
+        [self.places addObjectsFromArray:[MTLJSONAdapter
+                                          modelsOfClass:[Place class]
+                                          fromJSONArray:response[@"businesses"]
+                                          error:&error]];
          self.offset = self.places.count;
         [self.tableView reloadData];
         if (error) {
