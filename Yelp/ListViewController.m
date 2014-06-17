@@ -22,40 +22,52 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
 @interface ListViewController ()
 @property (nonatomic, strong) YelpClient *client;
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) PlaceCell *stubCell;
 
-@property (strong, nonatomic) NSArray *places;
+@property (nonatomic, strong) NSMutableArray *places;
 @property (nonatomic, strong) NSString *searchTerm;
+@property (nonatomic, strong) CLLocation *location;
+@property NSInteger offset;
 @end
 
 @implementation ListViewController
-
+{
+    BOOL isLoading;
+}
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.searchTerm = @"Thai";
+        self.searchTerm = @"";
+        self.offset = 0;
+        self.places = [[NSMutableArray alloc] init];
         self.client = [[YelpClient alloc]
                        initWithConsumerKey:kYelpConsumerKey
                        consumerSecret:kYelpConsumerSecret
                        accessToken:kYelpToken
                        accessSecret:kYelpTokenSecret];
-        [self search];
     }
     return self;
 }
 
 - (void)viewDidLoad
 {
-    NSLog(@"list view viewDidLoad");
     [super viewDidLoad];
+
     [self setupUI];
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"PlaceCell" bundle:nil] forCellReuseIdentifier:@"PlaceCell"];
+
+    if (self.locationManager == nil) {
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+        self.locationManager.delegate = self;
+    }
+    [self.locationManager startUpdatingLocation];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -63,11 +75,19 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    NSLog(@"list view viewDidAppear");
-   // [self viewDidLoad];
-    if ([self.filterSelection count] > 0) {
-        [self search];
+    NSString *model = [[UIDevice currentDevice] model];
+    if ([model isEqualToString:@"iPhone Simulator"]) {
+        self.location = [[CLLocation alloc] initWithLatitude:37.7873589 longitude:-122.408227];
+    } else {
+        self.location = self.locationManager.location;
     }
+    [self.places removeAllObjects];
+    [self search];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.locationManager stopUpdatingLocation];
 }
 
 - (PlaceCell *)stubCell {
@@ -84,6 +104,9 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     PlaceCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PlaceCell" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
+    if (indexPath.row == self.places.count - 1) {
+        isLoading = NO; // finishes loading
+    }
     return cell;
 }
 
@@ -104,6 +127,12 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
     return UITableViewAutomaticDimension;
 }
 
+- (void) locationManager:(CLLocationManager *)manager
+     didUpdateToLocation:(CLLocation *)newLocation
+            fromLocation:(CLLocation *)oldLocation {
+    self.location = newLocation;
+}
+
 - (void)showFilterScreen {
     FilterViewController *filterViewController = [[FilterViewController alloc] init];
     filterViewController.myDelegate = self;
@@ -115,12 +144,15 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
     [self.client
      searchWithTerm:self.searchTerm
      withFilters:self.filterSelection
+     atLocation:self.location
+     withOffset:self.offset
      success:^(AFHTTPRequestOperation *operation, id response) {
         NSError *error;
-        self.places = [MTLJSONAdapter modelsOfClass:[Place class] fromJSONArray:response[@"businesses"] error:&error];
+        [self.places addObjectsFromArray:[MTLJSONAdapter modelsOfClass:[Place class] fromJSONArray:response[@"businesses"] error:&error]];
+         self.offset = self.places.count;
         [self.tableView reloadData];
         if (error) {
-            NSLog(@"> error: %@", [error description]);
+            NSLog(@"error: %@", [error description]);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"error: %@", [error description]);
@@ -133,31 +165,41 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
+    [self.places removeAllObjects];
     self.searchTerm = textField.text;
     [self search];
     return YES;
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (isLoading) {
+        return;
+    }
+    CGFloat actualPosition = scrollView.contentOffset.y;
+    CGFloat contentHeight = scrollView.contentSize.height;
+    // Start fetching data before it gets to the end of the screen
+    if (contentHeight - actualPosition < 1000) {
+        isLoading = YES;
+        [self search];
+    }
+}
+
 - (void)setupUI {
-    
-//    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 310, 45.0)];
-//    searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UITextField *searchBar = [[UITextField alloc] initWithFrame:CGRectMake(5.0, 10.0, 200, 28.0)];
+    UITextField *searchField = [[UITextField alloc] initWithFrame:CGRectMake(5.0, 10.0, 200, 28.0)];
     UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 45.0)];
     searchBarView.autoresizingMask = 0;
-    searchBar.delegate = self;
-    searchBar.keyboardType = UIKeyboardTypeWebSearch;
-    // workaround to place search icon on the left
-    searchBar.placeholder = @"Search";
-    searchBar.text = self.searchTerm;
-    searchBar.font = [UIFont systemFontOfSize:14];
-    searchBar.backgroundColor = [UIColor whiteColor];
-    searchBar.tintColor = [UIColor grayColor];
-    searchBar.borderStyle = UITextBorderStyleRoundedRect;
-    searchBar.clearButtonMode = UITextFieldViewModeWhileEditing;
-    //CGFloat colors[3] ={196.0, 18.0, 0.0};
-    //searchBar.barTintColor = [Utils getColorFrom:colors];
-    [searchBarView addSubview:searchBar];
+
+    searchField.delegate = self;
+    searchField.keyboardType = UIKeyboardTypeWebSearch;
+    searchField.placeholder = @"Search";
+    searchField.text = self.searchTerm;
+    searchField.font = [UIFont systemFontOfSize:14];
+    searchField.backgroundColor = [UIColor whiteColor];
+    searchField.tintColor = [UIColor grayColor];
+    searchField.borderStyle = UITextBorderStyleRoundedRect;
+    searchField.clearButtonMode = UITextFieldViewModeWhileEditing;
+
+    [searchBarView addSubview:searchField];
     self.navigationItem.titleView = searchBarView;
     
     UIBarButtonItem *filterButton = [[UIBarButtonItem alloc]

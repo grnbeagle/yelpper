@@ -14,7 +14,9 @@
 
 + (UIColor *)getColorFrom:(CGFloat [3])rgb;
 
-+ (NSInteger)converToMeter:(NSInteger)miles;
++ (NSInteger)convertToMeter:(NSInteger)miles;
+
++ (float)convertToMiles:(float)meters;
 
 + (UIColor *)getYelpRed;
 @end

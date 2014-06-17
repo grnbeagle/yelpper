@@ -16,13 +16,14 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
-
     ListViewController *listViewController = [[ListViewController alloc] init];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listViewController];
     
     navigationController.navigationBar.barTintColor = [Utils getYelpRed];
     navigationController.navigationBar.tintColor = [UIColor whiteColor];
+
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    [[UINavigationBar appearance] setBarStyle:UIStatusBarStyleLightContent];
 
     self.window.rootViewController = navigationController;
 

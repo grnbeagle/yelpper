@@ -28,10 +28,21 @@
     return [self GET:@"search" parameters:parameters success:success failure:failure];
 }
 
-- (AFHTTPRequestOperation *)searchWithTerm:(NSString *)term withFilters:(NSDictionary *)filters success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+- (AFHTTPRequestOperation *)searchWithTerm:(NSString *)term
+                               withFilters:(NSDictionary *)filters
+                                atLocation:(CLLocation *)location
+                                withOffset:(NSInteger)offset
+                                   success:(void (^)(AFHTTPRequestOperation *operation, id response))success
+                                   failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
 
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    [parameters addEntriesFromDictionary:@{@"term": term, @"location" : @"San Francisco"}];
+    if (offset > 0) {
+        parameters[@"offset"] = [NSString stringWithFormat:@"%d", offset];
+    }
+    [parameters addEntriesFromDictionary:@{@"term": term,
+                                           @"ll": [NSString stringWithFormat:@"%f,%f",
+                                                    location.coordinate.latitude,
+                                                    location.coordinate.longitude]}];
     [parameters addEntriesFromDictionary:filters];
 
     NSLog(@"%@", parameters);

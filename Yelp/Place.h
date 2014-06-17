@@ -17,6 +17,8 @@
 @property (nonatomic, strong) NSString *imageThumbUrl;
 @property (nonatomic, strong) NSString *imageRatingUrl;
 @property (nonatomic, strong) NSArray *category;
+@property float distance;
+@property NSInteger reviewCount;
 
 + (NSArray *)getCategories;
 + (NSArray *)getDistanceOptions;

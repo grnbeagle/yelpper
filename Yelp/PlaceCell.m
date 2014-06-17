@@ -32,11 +32,7 @@
     [Utils loadImageUrl:place.imageThumbUrl inImageView:self.thumbImage withAnimation:YES];
     [Utils loadImageUrl:place.imageRatingUrl inImageView:self.ratingImage withAnimation:YES];
     self.categoryLabel.text = place.category[0][0];
-
-//    [self.nameLabel sizeToFit];
-//    [self.addressLabel sizeToFit];
-//    [self.thumbImage sizeToFit];
-//    [self.ratingImage sizeToFit];
-//    [self.categoryLabel sizeToFit];
+    self.distanceLabel.text = [NSString stringWithFormat:@"%.02f mi", [Utils convertToMiles:place.distance]];
+    self.reviewCountLabel.text = [NSString stringWithFormat:@"%i Reviews", place.reviewCount];
 }
 @end

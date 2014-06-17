@@ -27,6 +27,7 @@
 		53F54F86194E46FA00C0FD8A /* FilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F54F85194E46FA00C0FD8A /* FilterViewController.m */; };
 		53F54F8D194E4A6500C0FD8A /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F54F8B194E4A6500C0FD8A /* ListViewController.m */; };
 		53F54F8E194E4A6500C0FD8A /* ListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F54F8C194E4A6500C0FD8A /* ListViewController.xib */; };
+		53F54F901950340800C0FD8A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F54F8F1950340800C0FD8A /* CoreLocation.framework */; };
 		53F99C27194D2E1400BEFED6 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F99C26194D2E1400BEFED6 /* Place.m */; };
 		63E591F41F684901AF8C1C19 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DEC6D18C14F46F8AF2EA320 /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -71,6 +72,7 @@
 		53F54F8A194E4A6500C0FD8A /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
 		53F54F8B194E4A6500C0FD8A /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
 		53F54F8C194E4A6500C0FD8A /* ListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListViewController.xib; sourceTree = "<group>"; };
+		53F54F8F1950340800C0FD8A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		53F99C25194D2E1400BEFED6 /* Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Place.h; sourceTree = "<group>"; };
 		53F99C26194D2E1400BEFED6 /* Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Place.m; sourceTree = "<group>"; };
 		8436EC1AAEE1439D997D29F7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53F54F901950340800C0FD8A /* CoreLocation.framework in Frameworks */,
 				42FD6C4D18DC286B000BF2B9 /* CoreGraphics.framework in Frameworks */,
 				42FD6C4F18DC286B000BF2B9 /* UIKit.framework in Frameworks */,
 				42FD6C4B18DC286B000BF2B9 /* Foundation.framework in Frameworks */,
@@ -147,6 +150,7 @@
 		42FD6C4918DC286B000BF2B9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				53F54F8F1950340800C0FD8A /* CoreLocation.framework */,
 				42FD6C4A18DC286B000BF2B9 /* Foundation.framework */,
 				42FD6C4C18DC286B000BF2B9 /* CoreGraphics.framework */,
 				42FD6C4E18DC286B000BF2B9 /* UIKit.framework */,

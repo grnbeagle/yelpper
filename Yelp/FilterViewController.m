@@ -26,6 +26,7 @@
 // converting an immutable array from NSUserDefaults to a mutable one
 // was causing too many issues..
 @property (nonatomic, strong) NSMutableArray *categorySelection;
+
 @end
 
 @implementation FilterViewController
@@ -204,8 +205,14 @@ NSInteger maxCountCollapsed = 5;
 }
 
 - (void)search {
+    // Clean up filter values here:
+    // - Pass in a comma separated list of category filter
+    // - Remove radius_filter if its value is 'auto'
     [self.categorySelection removeObject:@""];
     self.filterSelection[@"category_filter"] = [self.categorySelection componentsJoinedByString:@","];
+    if ([self.filterSelection[@"radius_filter"] isEqual:@"auto"]) {
+        [self.filterSelection removeObjectForKey:@"radius_filter"];
+    }
 
     NSUserDefaults *store = [NSUserDefaults standardUserDefaults];
     [store setObject:self.filterSelection forKey:@"savedFilters"];

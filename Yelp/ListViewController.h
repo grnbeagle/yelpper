@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
 #import "FilterViewController.h"
 
-@interface ListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, SearchFilterDelegate>
+@interface ListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, SearchFilterDelegate, CLLocationManagerDelegate, UIScrollViewDelegate>
 
+@property (nonatomic, retain) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSDictionary *filterSelection;
 
 @end
