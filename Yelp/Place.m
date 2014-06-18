@@ -16,6 +16,7 @@
     return @{
              @"name": @"name",
              @"address": @"location.address",
+             @"displayAddress": @"location.display_address",
              @"imageThumbUrl": @"image_url",
              @"imageRatingUrl": @"rating_img_url",
              @"category": @"categories",
@@ -78,10 +79,10 @@
 + (NSArray *)getDistanceOptions {
     NSArray *options = @[
       @{@"name": @"Auto", @"value": @"auto"},
-      @{@"name": @"1 mile", @"value": [NSString stringWithFormat:@"%i", [Utils convertToMeter:1]]},
-      @{@"name": @"5 miles", @"value": [NSString stringWithFormat:@"%i", [Utils convertToMeter:5]]},
-      @{@"name": @"10 miles", @"value": [NSString stringWithFormat:@"%i", [Utils convertToMeter:10]]},
-      @{@"name": @"20 miles", @"value": [NSString stringWithFormat:@"%i", [Utils convertToMeter:20]]}
+      @{@"name": @"1 mile", @"value": [NSString stringWithFormat:@"%g", [Utils convertToMeter:1]]},
+      @{@"name": @"5 miles", @"value": [NSString stringWithFormat:@"%g", [Utils convertToMeter:5]]},
+      @{@"name": @"10 miles", @"value": [NSString stringWithFormat:@"%g", [Utils convertToMeter:10]]},
+      @{@"name": @"20 miles", @"value": [NSString stringWithFormat:@"%g", [Utils convertToMeter:20]]}
     ];
     return options;
 }

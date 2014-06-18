@@ -95,7 +95,6 @@ NSInteger maxCountCollapsed = 5;
     [super didReceiveMemoryWarning];
 }
 
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.filters.count;
 }
@@ -205,8 +204,8 @@ NSInteger maxCountCollapsed = 5;
 
 - (void)search {
     // Clean up filter values here:
-    // - Pass in a comma separated list of category filter
-    // - Remove radius_filter if its value is 'auto'
+    // - Pass in a comma separated list of `category_filter`
+    // - Remove `radius_filter` if its value is `auto`
     [self.categorySelection removeObject:@""];
     self.filterSelection[@"category_filter"] = [self.categorySelection componentsJoinedByString:@","];
     if ([self.filterSelection[@"radius_filter"] isEqual:@"auto"]) {

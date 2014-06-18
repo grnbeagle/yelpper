@@ -8,6 +8,7 @@
 
 #import "ListViewController.h"
 #import "FilterViewController.h"
+#import "MapViewController.h"
 #import "YelpClient.h"
 #import "MTLJSONAdapter.h"
 #import "Place.h"
@@ -23,6 +24,8 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
 @property (nonatomic, strong) YelpClient *client;
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *noResultView;
+@property (weak, nonatomic) IBOutlet UILabel *noResultLabel;
 @property (nonatomic, strong) PlaceCell *stubCell;
 
 @property (nonatomic, strong) NSMutableArray *places;
@@ -38,8 +41,8 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.searchTerm = @"";
         self.offset = 0;
+        self.searchTerm = @"";
         self.places = [[NSMutableArray alloc] init];
         self.client = [[YelpClient alloc]
                        initWithConsumerKey:kYelpConsumerKey
@@ -80,8 +83,6 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
     } else {
         self.location = self.locationManager.location;
     }
-    [self.places removeAllObjects];
-    [self search];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -139,6 +140,14 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
     [self presentViewController:navBar animated:YES completion:nil];
 }
 
+- (void)showMapScreen {
+    MapViewController *mapViewController = [[MapViewController alloc] init];
+    mapViewController.location = self.location;
+    mapViewController.places = self.places;
+    UINavigationController *navBar = [[UINavigationController alloc] initWithRootViewController:mapViewController];
+    [self presentViewController:navBar animated:YES completion:nil];
+}
+
 - (void)search {
     [self.client
      searchWithTerm:self.searchTerm
@@ -152,7 +161,8 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
                                           fromJSONArray:response[@"businesses"]
                                           error:&error]];
          self.offset = self.places.count;
-        [self.tableView reloadData];
+         [self displayNoResultsIfNecessary];
+         [self.tableView reloadData];
         if (error) {
             NSLog(@"error: %@", [error description]);
         }
@@ -162,11 +172,15 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
 }
 
 - (void)filterSelectionDone:(NSDictionary *)filters {
+    self.offset = 0;
     self.filterSelection = filters;
+    [self.places removeAllObjects];
+    [self search];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
+    self.offset = 0;
     [self.places removeAllObjects];
     self.searchTerm = textField.text;
     [self search];
@@ -200,6 +214,7 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
     searchField.tintColor = [UIColor grayColor];
     searchField.borderStyle = UITextBorderStyleRoundedRect;
     searchField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    searchField.autocorrectionType = UITextAutocorrectionTypeNo;
 
     [searchBarView addSubview:searchField];
     self.navigationItem.titleView = searchBarView;
@@ -209,6 +224,28 @@ NSString * const kYelpTokenSecret = @"ntw6alKMfabeHK1k4sLhN9IkomU";
                                      style:UIBarButtonItemStylePlain
                                      target:self
                                      action:@selector(showFilterScreen)];
+
+    UIBarButtonItem *mapButton = [[UIBarButtonItem alloc]
+                                  initWithTitle:@"Map"
+                                  style:UIBarButtonItemStylePlain
+                                  target:self
+                                  action:@selector(showMapScreen)];
     self.navigationItem.leftBarButtonItem = filterButton;
+    self.navigationItem.rightBarButtonItem = mapButton;
+}
+
+- (void)displayNoResultsIfNecessary {
+    if (self.places.count == 0) {
+        self.noResultView.hidden = NO;
+        self.tableView.hidden = YES;
+        if ([self.searchTerm length] > 0) {
+            self.noResultLabel.text = [NSString stringWithFormat:@"No results for %@", self.searchTerm];
+        } else {
+            self.noResultLabel.text = @"No results";
+        }
+    } else {
+        self.noResultView.hidden = YES;
+        self.tableView.hidden = NO;
+    }
 }
 @end

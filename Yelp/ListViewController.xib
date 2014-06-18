@@ -6,6 +6,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ListViewController">
             <connections>
+                <outlet property="noResultLabel" destination="XW4-2J-nYJ" id="25A-aG-ga2"/>
+                <outlet property="noResultView" destination="lqP-zQ-pjX" id="Hxy-vz-mTR"/>
                 <outlet property="tableView" destination="0EQ-v8-OIa" id="I9y-l6-3j9"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -20,12 +22,34 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lqP-zQ-pjX">
+                    <rect key="frame" x="0.0" y="44" width="320" height="120"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XW4-2J-nYJ">
+                            <rect key="frame" x="30" y="51" width="260" height="18"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="centerY" secondItem="XW4-2J-nYJ" secondAttribute="centerY" id="PU9-LF-QbA"/>
+                        <constraint firstAttribute="trailing" secondItem="XW4-2J-nYJ" secondAttribute="trailing" constant="30" id="VDH-N6-2WQ"/>
+                        <constraint firstAttribute="height" constant="120" id="oze-iN-QAw"/>
+                        <constraint firstItem="XW4-2J-nYJ" firstAttribute="leading" secondItem="lqP-zQ-pjX" secondAttribute="leading" constant="30" id="y0P-5M-oPy"/>
+                    </constraints>
+                </view>
             </subviews>
             <constraints>
                 <constraint firstItem="0EQ-v8-OIa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="4bH-yb-g4w"/>
                 <constraint firstItem="0EQ-v8-OIa" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="IFz-f8-PHL"/>
+                <constraint firstItem="lqP-zQ-pjX" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="RjC-18-whw"/>
                 <constraint firstAttribute="trailing" secondItem="0EQ-v8-OIa" secondAttribute="trailing" id="mZ5-bG-Dde"/>
                 <constraint firstAttribute="bottom" secondItem="0EQ-v8-OIa" secondAttribute="bottom" id="qLI-Q1-KzX"/>
+                <constraint firstAttribute="trailing" secondItem="lqP-zQ-pjX" secondAttribute="trailing" id="sd6-DI-pcw"/>
+                <constraint firstItem="lqP-zQ-pjX" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="44" id="vAd-oS-h4N"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>

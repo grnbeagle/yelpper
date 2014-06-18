@@ -24,6 +24,9 @@
 		537055BB194D59790080AD08 /* PlaceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 537055B9194D59790080AD08 /* PlaceCell.xib */; };
 		537055BE194D629C0080AD08 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 537055BD194D629C0080AD08 /* Utils.m */; };
 		537055CD194E3D760080AD08 /* FilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 537055CB194E3D760080AD08 /* FilterViewController.xib */; };
+		5373A57C1951327300DF4D9A /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5373A57A1951327300DF4D9A /* MapViewController.m */; };
+		5373A57D1951327300DF4D9A /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5373A57B1951327300DF4D9A /* MapViewController.xib */; };
+		5373A57F195134C800DF4D9A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5373A57E195134C800DF4D9A /* MapKit.framework */; };
 		53F54F86194E46FA00C0FD8A /* FilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F54F85194E46FA00C0FD8A /* FilterViewController.m */; };
 		53F54F8D194E4A6500C0FD8A /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F54F8B194E4A6500C0FD8A /* ListViewController.m */; };
 		53F54F8E194E4A6500C0FD8A /* ListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F54F8C194E4A6500C0FD8A /* ListViewController.xib */; };
@@ -68,6 +71,10 @@
 		537055BD194D629C0080AD08 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		537055C9194E3D760080AD08 /* FilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterViewController.h; sourceTree = "<group>"; };
 		537055CB194E3D760080AD08 /* FilterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterViewController.xib; sourceTree = "<group>"; };
+		5373A5791951327300DF4D9A /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		5373A57A1951327300DF4D9A /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		5373A57B1951327300DF4D9A /* MapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapViewController.xib; sourceTree = "<group>"; };
+		5373A57E195134C800DF4D9A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		53F54F85194E46FA00C0FD8A /* FilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterViewController.m; sourceTree = "<group>"; };
 		53F54F8A194E4A6500C0FD8A /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
 		53F54F8B194E4A6500C0FD8A /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
@@ -84,6 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5373A57F195134C800DF4D9A /* MapKit.framework in Frameworks */,
 				53F54F901950340800C0FD8A /* CoreLocation.framework in Frameworks */,
 				42FD6C4D18DC286B000BF2B9 /* CoreGraphics.framework in Frameworks */,
 				42FD6C4F18DC286B000BF2B9 /* UIKit.framework in Frameworks */,
@@ -123,6 +131,9 @@
 				53F54F8A194E4A6500C0FD8A /* ListViewController.h */,
 				53F54F8B194E4A6500C0FD8A /* ListViewController.m */,
 				53F54F8C194E4A6500C0FD8A /* ListViewController.xib */,
+				5373A5791951327300DF4D9A /* MapViewController.h */,
+				5373A57A1951327300DF4D9A /* MapViewController.m */,
+				5373A57B1951327300DF4D9A /* MapViewController.xib */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -150,6 +161,7 @@
 		42FD6C4918DC286B000BF2B9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5373A57E195134C800DF4D9A /* MapKit.framework */,
 				53F54F8F1950340800C0FD8A /* CoreLocation.framework */,
 				42FD6C4A18DC286B000BF2B9 /* Foundation.framework */,
 				42FD6C4C18DC286B000BF2B9 /* CoreGraphics.framework */,
@@ -303,6 +315,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42FD6C5518DC286B000BF2B9 /* InfoPlist.strings in Resources */,
+				5373A57D1951327300DF4D9A /* MapViewController.xib in Resources */,
 				53F54F8E194E4A6500C0FD8A /* ListViewController.xib in Resources */,
 				42FD6C5D18DC286B000BF2B9 /* Images.xcassets in Resources */,
 				537055CD194E3D760080AD08 /* FilterViewController.xib in Resources */,
@@ -361,6 +374,7 @@
 				53F54F8D194E4A6500C0FD8A /* ListViewController.m in Sources */,
 				53F99C27194D2E1400BEFED6 /* Place.m in Sources */,
 				53F54F86194E46FA00C0FD8A /* FilterViewController.m in Sources */,
+				5373A57C1951327300DF4D9A /* MapViewController.m in Sources */,
 				42FD6C5B18DC286B000BF2B9 /* AppDelegate.m in Sources */,
 				42FD6C5718DC286B000BF2B9 /* main.m in Sources */,
 				537055BA194D59790080AD08 /* PlaceCell.m in Sources */,

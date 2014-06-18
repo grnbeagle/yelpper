@@ -14,7 +14,7 @@
 
 + (UIColor *)getColorFrom:(CGFloat [3])rgb;
 
-+ (NSInteger)convertToMeter:(NSInteger)miles;
++ (float)convertToMeter:(float)miles;
 
 + (float)convertToMiles:(float)meters;
 

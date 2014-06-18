@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSArray *address;
+@property (nonatomic, strong) NSArray *displayAddress;
 @property (nonatomic, strong) NSString *imageThumbUrl;
 @property (nonatomic, strong) NSString *imageRatingUrl;
 @property (nonatomic, strong) NSArray *category;

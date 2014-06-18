@@ -19,8 +19,8 @@
      setImageWithURLRequest:[NSURLRequest requestWithURL:urlObject]
      placeholderImage:nil
      success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-         // Do not animate when it's cached
-         if (request != nil && enableAnimation) {
+         BOOL isCached = (request == nil);
+         if (!isCached && enableAnimation) {
              iv.alpha = 0.0;
              iv.image = image;
              [UIView animateWithDuration:0.5
@@ -38,7 +38,7 @@
     return [UIColor colorWithRed:rgb[0]/255.0f green:rgb[1]/255.0f blue:rgb[2]/255.0f alpha:1];
 }
 
-+ (NSInteger)convertToMeter:(NSInteger)miles {
++ (float)convertToMeter:(float)miles {
     return miles * 1609;
 }
 
